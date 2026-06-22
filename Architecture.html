@@ -1,19 +1,17 @@
-                 ┌────────────────────┐
-                 │   LOGIN SCREEN     │
-                 │ PIN / ROLE SELECT  │
-                 └─────────┬──────────┘
-                           ▼
-        ┌─────────────────────────────────┐
-        │        ROLE ENGINE              │
-        │  GUEST | DJ | ADMIN            │
-        └─────────┬─────────┬───────────┘
-                  ▼         ▼
-        ┌────────────┐ ┌──────────────┐
-        │ GUEST VIEW │ │ DJ OPERATIONS │
-        │ (read-only)│ │ ON AIR CTRL   │
-        └────────────┘ └──────┬───────┘
-                              ▼
-                     ┌──────────────┐
-                     │ ADMIN PANEL  │
-                     │ full system  │
-                     └──────────────┘
+           ┌──────────────────────────────┐
+           │   SENSTACK OS FRONTEND       │
+           │ (GitHub Pages / Dashboard)   │
+           └─────────────┬────────────────┘
+                         │
+                 REAL-TIME STATE
+                         │
+        ┌────────────────┴────────────────┐
+        │                                 │
+┌───────────────┐               ┌────────────────┐
+│  SUPABASE DB  │               │ LIVE SUBSCRIPT │
+│ (single truth)│◄─────────────►│ (realtime sync)│
+└───────────────┘               └────────────────┘
+        │
+        ▼
+ ALL DEVICES UPDATE INSTANTLY
+ (DJ, Admin, Guests, Phones, Tablets)
