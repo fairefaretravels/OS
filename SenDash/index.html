@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>SENSTACK OS — STV Control Tower</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Inter, Arial;
+  background: #0D0D0D;
+  color: #F0EDE6;
+}
+
+header {
+  padding: 20px;
+  border-bottom: 1px solid #2A2A2A;
+}
+
+h1 {
+  font-family: Georgia;
+  color: #C8963E;
+  margin: 0;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 15px;
+  padding: 20px;
+}
+
+.card {
+  background: #141414;
+  border: 1px solid #2A2A2A;
+  padding: 15px;
+  border-radius: 10px;
+}
+
+.card h2 {
+  font-size: 14px;
+  color: #C8963E;
+}
+
+a {
+  color: #F0EDE6;
+  text-decoration: none;
+  display: block;
+  margin: 5px 0;
+}
+
+.badge {
+  display: inline-block;
+  padding: 4px 8px;
+  background: #C8963E;
+  color: black;
+  font-size: 12px;
+  border-radius: 4px;
+}
+
+img {
+  width: 100%;
+  border-radius: 8px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>SENSTACK OS</h1>
+  <span class="badge">STV CONTROL TOWER</span>
+</header>
+
+<div class="grid">
+
+  <!-- LIVE STREAM -->
+  <div class="card">
+    <h2>LIVE RADIO</h2>
+    <audio controls style="width:100%">
+      <source src="https://listen.streamaudio.co/proxy/stvradio/stream" type="audio/mpeg">
+    </audio>
+    <a href="https://listen.streamaudio.co/start/stvradio">Start Stream</a>
+  </div>
+
+  <!-- VDO ROOM -->
+  <div class="card">
+    <h2>LIVE ROOM</h2>
+    <a href="https://vdo.ninja/?scene=0&layout&remote&showlabels&room=STVlIv3" target="_blank">
+      Open VDO Room
+    </a>
+  </div>
+
+  <!-- PROMO ARTIST CARD -->
+  <div class="card">
+    <h2>PROMO ARTIST</h2>
+    <img src="https://img.youtube.com/vi/R8B3-SPlP18/maxresdefault.jpg" />
+    <a href="https://music.youtube.com/watch?v=R8B3-SPlP18" target="_blank">
+      EMIL GORDON JR ft Risk — Cruzin
+    </a>
+  </div>
+
+  <!-- SYSTEM LINKS -->
+  <div class="card">
+    <h2>SYSTEM MAP</h2>
+    <a href="https://fairefaretravels.github.io/STVdigital-products/">Digital Products</a>
+    <a href="https://fairefaretravels.github.io/stv-backoffice/">Backoffice</a>
+    <a href="https://radiomeltdown.com/">Radio Site</a>
+    <a href="https://sen-finds.myshopify.com/">Shop</a>
+  </div>
+
+  <!-- STATUS -->
+  <div class="card">
+    <h2>SYSTEM STATUS</h2>
+    <p>Broadcast: ACTIVE</p>
+    <p>Events: READY</p>
+    <p>Funnels: STANDBY</p>
+  </div>
+
+</div>
+
+</body>
+</html>
