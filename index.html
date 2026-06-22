@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>SENSTACK OS — Persistent Broadcast Control Tower</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Inter, Arial;
+  background: #0D0D0D;
+  color: #F0EDE6;
+}
+
+/* LOGIN */
+#login {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+input {
+  padding: 12px;
+  width: 240px;
+  margin: 6px;
+  border-radius: 6px;
+  border: none;
+  text-align: center;
+}
+
+button {
+  padding: 12px;
+  width: 240px;
+  margin: 6px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background: #C8963E;
+  font-weight: bold;
+}
+
+/* APP */
+#app { display:none; }
+
+header {
+  padding: 18px;
+  border-bottom: 1px solid #2A2A2A;
+  display:flex;
+  justify-content:space-between;
+}
+
+h1 {
+  margin: 0;
+  color: #C8963E;
+  font-family: Georgia;
+}
+
+.badge {
+  background:#C8963E;
+  color:black;
+  padding:4px 8px;
+  border-radius:4px;
+}
+
+.grid {
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap:15px;
+  padding:20px;
+}
+
+.card {
+  background:#141414;
+  border:1px solid #2A2A2A;
+  padding:15px;
+  border-radius:10px;
+}
+
+.status {
+  margin-top:10px;
+  padding:10px;
+  background:#111;
+  border-left:4px solid #C8963E;
+  font-size:13px;
+}
+
+button.ctrl {
+  width:100%;
+  margin:5px 0;
+}
+
+.onair { background:#C8963E; color:black; }
+.offair { background:#2A2A2A; color:white; }
+
+.logbox {
+  height:120px;
+  overflow:auto;
+  font-size:12px;
+  background:#0f0f0f;
+  padding:10px;
+  border:1px solid #2A2A2A;
+}
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+<div id="login">
+  <h2 style="color:#C8963E;">SENSTACK OS LOGIN</h2>
+  <input id="pin" placeholder="Enter Access PIN" />
+  <button onclick="login()">ENTER SYSTEM</button>
+</div>
+
+<!-- APP -->
+<div id="app">
+
+<header>
+  <h1>SENSTACK OS</h1>
+  <div class="badge" id="roleBadge"></div>
+</header>
+
+<div class="grid">
+
+  <!-- CONTROL -->
+  <div class="card">
+    <h3>🎛 OPERATOR</h3>
+
+    <button class="ctrl onair" onclick="setState('ON AIR')">ON AIR</button>
+    <button class="ctrl offair" onclick="setState('OFF AIR')">OFF AIR</button>
+
+    <div class="status" id="stateBox"></div>
+  </div>
+
+  <!-- DJ -->
+  <div class="card">
+    <h3>🎧 DJ MODE</h3>
+
+    <button onclick="setDJ('AUTO DJ')">AUTO DJ</button>
+    <button onclick="setDJ('LIVE DJ')">LIVE DJ</button>
+
+    <div class="status" id="djBox"></div>
+  </div>
+
+  <!-- STREAM -->
+  <div class="card">
+    <h3>📡 STREAM</h3>
+    <a href="https://listen.streamaudio.co/proxy/stvradio/stream" target="_blank">Live Stream</a>
+  </div>
+
+  <!-- LOG -->
+  <div class="card">
+    <h3>🧭 SYSTEM LOG</h3>
+    <div class="logbox" id="logBox"></div>
+    <button onclick="clearLog()">CLEAR LOG</button>
+  </div>
+
+</div>
+
+</div>
+
+<script>
+
+/* =========================
+   STATE ENGINE
+========================= */
+
+let state = {
+  role: "GUEST",
+  broadcast: "STANDBY",
+  dj: "AUTO DJ",
+  log: []
+};
+
+function saveState() {
+  localStorage.setItem("SENSTACK_OS", JSON.stringify(state));
+}
+
+function loadState() {
+  const saved = localStorage.getItem("SENSTACK_OS");
+  if (saved) state = JSON.parse(saved);
+}
+
+/* =========================
+   INIT
+========================= */
+
+loadState();
+
+/* =========================
+   LOGIN
+========================= */
+
+function login() {
+  const pin = document.getElementById("pin").value;
+
+  if (pin === "DJ404") state.role = "DJ";
+  else if (pin === "ADMIN999") state.role = "ADMIN";
+  else state.role = "GUEST";
+
+  document.getElementById("login").style.display = "none";
+  document.getElementById("app").style.display = "block";
+
+  render();
+  log("LOGIN → " + state.role);
+  saveState();
+}
+
+/* =========================
+   ACTIONS
+========================= */
+
+function setState(s) {
+  state.broadcast = s;
+  log("BROADCAST → " + s);
+  render();
+  saveState();
+}
+
+function setDJ(m) {
+  state.dj = m;
+  log("DJ MODE → " + m);
+  render();
+  saveState();
+}
+
+/* =========================
+   LOG SYSTEM
+========================= */
+
+function log(msg) {
+  const entry = new Date().toLocaleTimeString() + " — " + msg;
+  state.log.unshift(entry);
+  if (state.log.length > 20) state.log.pop();
+}
+
+/* =========================
+   RENDER SYSTEM
+========================= */
+
+function render() {
+  document.getElementById("roleBadge").innerText = state.role;
+
+  document.getElementById("stateBox").innerText =
+    "Broadcast: " + state.broadcast;
+
+  document.getElementById("djBox").innerText =
+    "Mode: " + state.dj;
+
+  document.getElementById("logBox").innerHTML =
+    state.log.map(l => "• " + l).join("<br>");
+}
+
+/* =========================
+   CLEAR LOG
+========================= */
+
+function clearLog() {
+  state.log = [];
+  saveState();
+  render();
+}
+
+/* =========================
+   AUTO RESTORE
+========================= */
+
+if (localStorage.getItem("SENSTACK_OS")) {
+  document.getElementById("login").style.display = "none";
+  document.getElementById("app").style.display = "block";
+  render();
+}
+
+</script>
+
+</body>
+</html>
