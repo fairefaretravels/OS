@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>SENSTACK OS — Staff Mode</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Inter, Arial;
+  background: #0D0D0D;
+  color: #F0EDE6;
+}
+
+/* LOGIN */
+#login {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+input {
+  padding: 12px;
+  margin: 6px;
+  width: 220px;
+  border-radius: 6px;
+  border: none;
+  text-align: center;
+}
+
+button {
+  padding: 12px;
+  width: 220px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background: #C8963E;
+  font-weight: bold;
+}
+
+/* DASHBOARD */
+#app {
+  display: none;
+}
+
+header {
+  padding: 20px;
+  border-bottom: 1px solid #2A2A2A;
+}
+
+h1 {
+  color: #C8963E;
+  margin: 0;
+  font-family: Georgia;
+}
+
+.badge {
+  background: #C8963E;
+  color: black;
+  padding: 4px 8px;
+  border-radius: 4px;
+  display: inline-block;
+  margin-top: 5px;
+}
+
+/* GRID */
+.container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 15px;
+  padding: 20px;
+}
+
+.card {
+  background: #141414;
+  border: 1px solid #2A2A2A;
+  padding: 15px;
+  border-radius: 10px;
+}
+
+button.ctrl {
+  width: 100%;
+  margin: 6px 0;
+}
+
+.onair { background:#C8963E; color:black; }
+.offair { background:#2A2A2A; color:white; }
+.adminOnly { display:none; }
+
+.status {
+  margin-top: 10px;
+  padding: 10px;
+  background:#111;
+  border-left:4px solid #C8963E;
+}
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN SCREEN -->
+<div id="login">
+  <h2>SENSTACK OS LOGIN</h2>
+  <input id="pin" placeholder="Enter Access PIN" />
+  <button onclick="login()">ENTER SYSTEM</button>
+  <p style="opacity:0.5;font-size:12px;">DJ / ADMIN / GUEST MODE</p>
+</div>
+
+<!-- MAIN APP -->
+<div id="app">
+
+<header>
+  <h1>STAFF CONTROL ROOM</h1>
+  <div class="badge" id="roleBadge">GUEST MODE</div>
+</header>
+
+<div class="container">
+
+  <!-- BROADCAST -->
+  <div class="card">
+    <h3>🎛️ BROADCAST</h3>
+
+    <button class="ctrl onair" onclick="setStatus('ON AIR')">ON AIR</button>
+    <button class="ctrl offair" onclick="setStatus('OFF AIR')">OFF AIR</button>
+
+    <div class="status" id="statusBox">Status: STANDBY</div>
+  </div>
+
+  <!-- STREAM -->
+  <div class="card">
+    <h3>📡 STREAM</h3>
+    <a href="https://listen.streamaudio.co/proxy/stvradio/stream" target="_blank">Live Stream</a>
+    <a href="https://listen.streamaudio.co/start/stvradio" target="_blank">Start Stream</a>
+  </div>
+
+  <!-- DJ CONTROLS -->
+  <div class="card">
+    <h3>🎧 DJ CONTROLS</h3>
+
+    <button class="ctrl" onclick="setDJ('AUTO DJ')">Auto DJ</button>
+    <button class="ctrl" onclick="setDJ('LIVE DJ')">Live DJ</button>
+
+    <div class="status" id="djBox">Mode: AUTO DJ</div>
+  </div>
+
+  <!-- LIVE ROOM -->
+  <div class="card">
+    <h3>🎥 STUDIO</h3>
+    <a href="https://vdo.ninja/?scene=0&layout&remote&showlabels&room=STVlIv3" target="_blank">
+      Open Live Room
+    </a>
+  </div>
+
+  <!-- ADMIN ONLY -->
+  <div class="card adminOnly" id="adminPanel">
+    <h3>🧠 ADMIN PANEL</h3>
+    <p>System-level controls unlocked</p>
+    <div class="status">Full system access enabled</div>
+  </div>
+
+</div>
+
+</div>
+
+<script>
+
+let role = "GUEST";
+
+function login() {
+  const pin = document.getElementById("pin").value;
+
+  // SIMPLE ROLE SYSTEM (front-end only)
+  if (pin === "DJ404") {
+    role = "DJ";
+  } 
+  else if (pin === "ADMIN999") {
+    role = "ADMIN";
+  } 
+  else {
+    role = "GUEST";
+  }
+
+  document.getElementById("login").style.display = "none";
+  document.getElementById("app").style.display = "block";
+
+  document.getElementById("roleBadge").innerText = role + " MODE";
+
+  if (role === "ADMIN") {
+    document.querySelectorAll(".adminOnly").forEach(el => {
+      el.style.display = "block";
+    });
+  }
+
+  log("Login as " + role);
+}
+
+function setStatus(state) {
+  document.getElementById("statusBox").innerText = "Status: " + state;
+  log("Broadcast → " + state);
+}
+
+function setDJ(mode) {
+  document.getElementById("djBox").innerText = "Mode: " + mode;
+  log("DJ Mode → " + mode);
+}
+
+function log(msg) {
+  console.log("[SYSTEM]", msg);
+}
+
+</script>
+
+</body>
+</html>
